@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MDNotepad.MainWindow"
+        Title="MDNotepad">
+	
+	<DockPanel>
+		<!-- #Side bar -->
+		<StackPanel DockPanel.Dock="Left" Width="250" Background="#FF2E2E2E" Spacing="10">
+
+			<Button Name="SelectFolderButton" Content="Select Folder" Height="30" />
+
+			<ListBox Name="FilesListBox" Background="#FF1E1E1E" Foreground="White" />
+			
+		</StackPanel>
+
+		<!-- #Content -->
+		<ScrollViewer Background="White" Padding="10">
+			<TextBlock Name="MarkDownTextBlock" TextWrapping="Wrap" FontFamily="Consolas" />
+		</ScrollViewer>
+		
+	</DockPanel>
+</Window>
