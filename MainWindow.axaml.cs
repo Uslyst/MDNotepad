@@ -57,7 +57,7 @@ public partial class MainWindow : Window
 
         foreach (var file in files)
         {
-            // # Adding only the path
+            // #Adding only the path (do load the file into the poor memory)
             markdownFiles.Add(Path.GetFileName(file));
         }
     }
