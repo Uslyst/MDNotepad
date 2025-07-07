@@ -2,24 +2,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MDNotepad.MainWindow"
         Title="MDNotepad">
 	
 	<DockPanel>
 		<!-- #Side bar -->
-		<StackPanel DockPanel.Dock="Left" Width="250" Background="#FF2E2E2E" Spacing="10">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="300" MinWidth="100" />
+				<ColumnDefinition Width="5" />
+				<ColumnDefinition Width="*" />
+				<!-- Conteúdo principal se ajusta aqui -->
+			</Grid.ColumnDefinitions>
 
-			<Button Name="SelectFolderButton" Content="Select Folder" Height="30" />
+			<!-- Barra lateral -->
+			<StackPanel Grid.Column="0" Background="#161616" Spacing="10">
+				<Button Name="SelectFolderButton" Content="Select Folder" Height="30" />
+				<ListBox Name="FilesListBox" Background="#FF1E1E1E" Foreground="White" />
+			</StackPanel>
 
-			<ListBox Name="FilesListBox" Background="#FF1E1E1E" Foreground="White" />
-			
-		</StackPanel>
+			<!-- GridSplitter entre a barra lateral e o conteúdo -->
+			<GridSplitter Grid.Column="1" Width="1" Background="#323030" HorizontalAlignment="Stretch" />
 
-		<!-- #Content -->
-		<ScrollViewer Background="White" Padding="10">
-			<TextBlock Name="MarkDownTextBlock" TextWrapping="Wrap" FontFamily="Consolas" />
-		</ScrollViewer>
-		
+			<!-- WebView ajustável -->
+			<WebView Grid.Column="2" Name="MarkdownWebView" />
+		</Grid>
 	</DockPanel>
 </Window>

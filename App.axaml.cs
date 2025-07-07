@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using AvaloniaWebView;
 
 namespace MDNotepad;
 
@@ -22,5 +23,11 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+    public override void RegisterServices()
+    {
+        base.RegisterServices();
+
+        AvaloniaWebViewBuilder.Initialize(default);
     }
 }

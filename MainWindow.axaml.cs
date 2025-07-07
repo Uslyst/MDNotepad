@@ -29,12 +29,54 @@ public partial class MainWindow : Window
 
             if (File.Exists(fullPath))
             {
-                var content = await File.ReadAllTextAsync(fullPath);
+                
+                var markdown = await File.ReadAllTextAsync(fullPath);
 
-                MarkDownTextBlock.Text = content;
+                var bodyHtml = Markdig.Markdown.ToHtml(markdown);
+
+                var html = $@"
+                    <!DOCTYPE html>
+<html>
+   <head>
+      <meta charset=""UTF-8"">
+      <style>
+         body {{
+         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+         padding: 20px;
+         color: white;
+         background-color: #161616;
+         }}
+         .container {{
+         max-width: 800px;
+         margin-top: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;       
+         padding: 20px;   
+         }}
+         hr {{
+         border: none;
+         height: 1px;
+         background-color: #555;
+         margin: 20px 0;
+         }}
+      </style>
+   </head>
+   <body>
+      <div class=""container"">
+      <h1>{FilesListBox.SelectedItem.ToString()}</h1>
+         {bodyHtml}
+      </div>
+   </body>
+</html>
+                    ";
+
+                MarkdownWebView.HtmlContent = html;
             }
         }
     }
+
 
     private async void SelectFolderButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -57,7 +99,7 @@ public partial class MainWindow : Window
 
         foreach (var file in files)
         {
-            // #Adding only the path (do load the file into the poor memory)
+            // #Adding only the path (do not load the file into the poor memory)
             markdownFiles.Add(Path.GetFileName(file));
         }
     }
