@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ public partial class MainWindow : Window
         FilesListBox.SelectionChanged += FilesListBox_SelectionChanged;
     }
 
+    private string HtmlTemplatePath = Path.Combine(AppContext.BaseDirectory, "Assets", "template.html");
     private async void FilesListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (FilesListBox.SelectedItem is string fileName && !string.IsNullOrEmpty(currentFolder))
@@ -32,47 +34,15 @@ public partial class MainWindow : Window
                 
                 var markdown = await File.ReadAllTextAsync(fullPath);
 
-                var bodyHtml = Markdig.Markdown.ToHtml(markdown);
+                string markdownHtml = Markdig.Markdown.ToHtml(markdown);
+                string title = Path.GetFileNameWithoutExtension(fullPath);
 
-                var html = $@"
-                    <!DOCTYPE html>
-<html>
-   <head>
-      <meta charset=""UTF-8"">
-      <style>
-         body {{
-         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-         Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-         padding: 20px;
-         color: white;
-         background-color: #161616;
-         }}
-         .container {{
-         max-width: 800px;
-         margin-top: 5px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 40px;       
-         padding: 20px;   
-         }}
-         hr {{
-         border: none;
-         height: 1px;
-         background-color: #555;
-         margin: 20px 0;
-         }}
-      </style>
-   </head>
-   <body>
-      <div class=""container"">
-      <h1>{FilesListBox.SelectedItem.ToString()}</h1>
-         {bodyHtml}
-      </div>
-   </body>
-</html>
-                    ";
+                var htmlTemplate = await File.ReadAllTextAsync(HtmlTemplatePath);
+                
+                string filledHtml = htmlTemplate.Replace("{{title}}", title)
+                                                .Replace("{{body}}", markdownHtml);
 
-                MarkdownWebView.HtmlContent = html;
+                MarkdownWebView.HtmlContent = filledHtml;
             }
         }
     }
