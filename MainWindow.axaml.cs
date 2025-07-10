@@ -23,6 +23,7 @@ public partial class MainWindow : Window
     }
 
     private string HtmlTemplatePath = Path.Combine(AppContext.BaseDirectory, "Assets", "template.html");
+    private string EditorJSPath = Path.Combine(AppContext.BaseDirectory, "Assets", "editor.js");
     private async void FilesListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (FilesListBox.SelectedItem is string fileName && !string.IsNullOrEmpty(currentFolder))
@@ -31,21 +32,23 @@ public partial class MainWindow : Window
 
             if (File.Exists(fullPath))
             {
-                
                 var markdown = await File.ReadAllTextAsync(fullPath);
-
                 string markdownHtml = Markdig.Markdown.ToHtml(markdown);
                 string title = Path.GetFileNameWithoutExtension(fullPath);
 
+                var javaScriptEditor = await File.ReadAllTextAsync(EditorJSPath);
                 var htmlTemplate = await File.ReadAllTextAsync(HtmlTemplatePath);
-                
-                string filledHtml = htmlTemplate.Replace("{{title}}", title)
-                                                .Replace("{{body}}", markdownHtml);
+
+                string filledHtml = htmlTemplate
+                    .Replace("{{title}}", title)
+                    .Replace("{{body}}", markdownHtml)
+                    .Replace("{{editor}}", javaScriptEditor);
 
                 MarkdownWebView.HtmlContent = filledHtml;
             }
         }
     }
+
 
 
     private async void SelectFolderButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

@@ -30,11 +30,20 @@
       </style>
    </head>
    <body>
-       <script src="editor.js"></script>
-       <div class="container" contenteditable="true">
+
+       <script>
+       {{editor}}
+       </script>
+
+       <div class="container" contenteditable="true" onmouseup="onSelection()">
            <h1>{{title}}</h1>
            {{body}}
-           <button OnClick="hello()" Test JS />
        </div>
+
+       <!-- Placeholder to inject JavaScript directly into the HTML.
+    External <script src=""> does not work reliably in Avalonia WebView,
+    so the script is inlined here at runtime from C#. -->
+
+
    </body>
 </html>
